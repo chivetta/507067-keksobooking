@@ -11,6 +11,13 @@ var getRandomNumber = function (min, max) {
   return randomNumber;
 };
 
+// дает одно из значений массива
+
+var getOneRandomArrayElement = function (array) {
+  var randomArrayElement = array[getRandomNumber(0, array.length)];
+  return randomArrayElement;
+};
+
 // создает массив
 var getArray = function (item) {
   var array = [];
@@ -18,16 +25,16 @@ var getArray = function (item) {
     array.push(i);
   }
   return array;
-}
+};
 
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin');
 var cardTemplate = document.querySelector('#card');
 
 
+// аватар, адрес не должен повторяться
 
-// аватар
-var arrayForAvatars =  getArray(8);
+var arrayForAvatars = getArray(8);
 
 var getAvatarUrl = function () {
   var imgNumber = arrayForAvatars.splice(getRandomNumber(1, arrayForAvatars.length), 1);
@@ -35,74 +42,69 @@ var getAvatarUrl = function () {
   return imgUrl;
 };
 
-console.log(getAvatarUrl());
+// предложение
 
-
-var title = [
+var titles = [
   'Большая уютная квартира', 'Маленькая неуютная квартира',
   'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-var adress = "{{location.x}}, {{location.y}}";
+var getTitle = function () {
+  var offerTitle = titles.splice(getRandomNumber(1, titles.length), 1);
+  return offerTitle.toString();
+};
 
-var price = getRandomNumber(1000, 1000000);
+var adress = '{{location.x}}, {{location.y}}';
 
-var type = ['palace', 'flat', 'house', 'bungalo'];
+var types = ['palace', 'flat', 'house', 'bungalo'];
 
-var rooms = getRandomNumber(1, 5);
-
-var guests = getRandomNumber(1, 10); //  how many guests?
-
-var checkin = ['12:00', '13:00', '14:00'];
-
-var checkout = ['12:00', '13:00', '14:00'];
+var timeframes = ['12:00', '13:00', '14:00'];
 
 var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-var description = '';
+var getFeatures = function () {
+  var newFeatures = [];
+  var numberOfElements = getRandomNumber(0, features.length);
+  for (var i = 0; i < numberOfElements; i++) {
+    var randomFeature = features.splice(getRandomNumber(1, features.length), 1);
+    newFeatures.push(randomFeature.toString());
+  }
+  return newFeatures;
+};
 
 var photos = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-/*var advertisement = {
-  autor : {avatar : getAvatarUrl()},
-  offer : {
-    title: ,
-    address: ,
+var getArrayOfPhotos = function () {
+  var compareRandom = function () {
+    return Math.random() - 0.5;
+  };
+  var newPhotos = photos.sort(compareRandom);
+  return newPhotos;
+};
+
+var advertisement = {
+  autor: {avatar: getAvatarUrl()},
+  offer: {
+    title: getTitle(),
+    address: adress,
     price: getRandomNumber(1000, 1000000),
-    type: ,
+    type: getOneRandomArrayElement(types),
     rooms: getRandomNumber(1, 5),
     guests: getRandomNumber(1, 10),
-    checkin: ,
-    checkout: ,
-    features: ,
+    checkin: getOneRandomArrayElement(timeframes),
+    checkout: getOneRandomArrayElement(timeframes),
+    features: getFeatures(),
     description: '',
-    photos:
+    photos: getArrayOfPhotos()
   },
-  location : {
+  location: {
     x: 0,
     y: 0
   }
-}*/
-
-
-
-
-
-
-
-
-/*var getPinTemplate = function (card) {
-  var template = document.querySelector('#card').content.querySelector('.setup-similar-item');
-  var templateElement = template.cloneNode(true);
-
-  templateElement.querySelector('.popup__avatarsetup-similar-label').textContent = card.nameOfWizard;
-  templateElement.querySelector('.wizard-coat').style.fill = card.coatColor;
-  templateElement.querySelector('.wizard-eyes').style.fill = card.eyesColor;
-
-  return templateElement;
-};*/
-
+};
 
 makeVisible(map);
